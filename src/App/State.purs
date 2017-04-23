@@ -11,6 +11,7 @@ data State = State
   { title :: String
   , route :: Route
   , loaded :: Boolean
+  , clicks :: Int
   }
 
 instance decodeJsonState :: DecodeJson State where
@@ -19,10 +20,12 @@ instance decodeJsonState :: DecodeJson State where
     title <- obj .? "title"
     url <- obj .? "route"
     loaded <- obj .? "loaded"
+    clicks <- obj .? "clicks"
     pure $ State
       { title
       , loaded
       , route: match url
+      , clicks
       }
 
 instance encodeJsonState :: EncodeJson State where
@@ -30,6 +33,7 @@ instance encodeJsonState :: EncodeJson State where
        "title" := st.title
     ~> "route" := toURL st.route
     ~> "loaded" := st.loaded
+    ~> "clicks" := st.clicks
     ~> jsonEmptyObject
 
 init :: String -> State
@@ -37,4 +41,5 @@ init url = State
   { title: config.title
   , route: match url
   , loaded: false
+  , clicks: 0
   }
