@@ -9,11 +9,13 @@ import Text.Smolder.HTML (a, div, h1, button)
 import Text.Smolder.HTML.Attributes (href, onclick)
 import Text.Smolder.Markup ((!), text, withEvent, on)
 import Prelude (bind, show)
-import Utils (debug)
+import Utils (debug, (<|), (|>))
 
 view :: State -> HTML Event
 view (State st) =
   div do
     h1 $ a ! href "https://www.purescript-pux.org" $ text st.title
     button `withEvent` onClick (\_ -> ButtonClicked) $ text "Click me"
-    div $ text $ show (debug st).clicks
+    --div <| text <| show <| debug st.clicks
+    st.clicks |> show |> text |> div
+    
